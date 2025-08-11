@@ -37,7 +37,7 @@ public class PanoramaCraft implements ModInitializer {
 
 
 				Text panoramaTakenText = Text.literal(PANORAMA_NAMES).formatted(Formatting.UNDERLINE).styled((style) -> {
-					return style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, SCREENSHOT_DIR.getAbsolutePath()));
+					return style.withClickEvent(new ClickEvent.OpenFile(SCREENSHOT_DIR.getAbsolutePath()));
 				});
 				client.player.sendMessage(Text.translatable("screenshot.success", new Object[]{panoramaTakenText}), false);
 			}
