@@ -10,6 +10,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 public class PanoramaCraft implements ModInitializer {
-    public static final Logger LOGGER = LoggerFactory.getLogger("panorama_craft");
+    public static final Logger LOGGER = LoggerFactory.getLogger("panorama_screenshot");
 
 	private final File GAME_DIR = new File(FabricLoader.getInstance().getGameDir().toString());
 	private final File SCREENSHOT_DIR = new File(FabricLoader.getInstance().getGameDir().toString() + "/screenshots/");
@@ -26,7 +27,8 @@ public class PanoramaCraft implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-		KeyBinding panoramaKeyBinding = new KeyBinding("Take Panorama Screenshot", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F4, "Panorama Screenshot");
+		//now translation needed
+		KeyBinding panoramaKeyBinding = new KeyBinding("Take Panorama Screenshot", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F4, KeyBinding.Category.create(Identifier.of("panorama_screenshot")));
 		KeyBindingHelper.registerKeyBinding(panoramaKeyBinding);
 
 
