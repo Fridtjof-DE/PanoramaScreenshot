@@ -1,6 +1,6 @@
 [![API Badge](https://img.shields.io/badge/MC%20version-Fabric%201.20.1,%201.20.4,%201.20.6,%201.21.1,%201.21.4,%201.21.8,%201.21.10,%201.21.11-blue?style=flat-square)](https://www.spigotmc.org/)
 [![Dev State Badge](https://img.shields.io/badge/stage%20of%20development-release-green?style=flat-square)]()
-[![Maintenance Badge](https://img.shields.io/maintenance/yes/2025?style=flat-square)]()
+[![Maintenance Badge](https://img.shields.io/maintenance/yes/2026?style=flat-square)]()
 [![Issue Badge](https://img.shields.io/github/issues/Fridtjof-DE/PanoramaScreenshot?style=flat-square)](https://github.com/Fridtjof-DE/PanoramaScreenshot/issues)
 [![Discord Online Badge](https://img.shields.io/discord/961799414647750717?label=Discord&style=flat-square)](https://discord.gg/fT6VJurHCT)
 
