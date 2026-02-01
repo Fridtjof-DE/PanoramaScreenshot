@@ -20,15 +20,6 @@ repositories {
 
 loom {
     splitEnvironmentSourceSets()
-
-    // soll ich ohne probieren
-    /*mods {
-        "modid" {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.client
-        }
-    }*/
-
 }
 
 dependencies {
@@ -36,9 +27,9 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
 
-    // das wären Mojangs Mappings
+    // Mojangs Mappings
     //mappings loom.officialMojangMappings()
-    // ich will aber weiter yarn
+    // Yarn
     mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
 
 
