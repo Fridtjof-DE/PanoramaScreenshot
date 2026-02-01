@@ -15,8 +15,12 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class PanoramaCraft implements ClientModInitializer {
 
@@ -24,6 +28,8 @@ public class PanoramaCraft implements ClientModInitializer {
 	private static final String PANORAMA_NAMES = "panorama_0.png – panorama_5.png";
 	private final Path GAME_DIR = FabricLoader.getInstance().getGameDir();
 	private final Path SCREENSHOT_DIR = GAME_DIR.resolve("screenshots");
+	private final Path PANORAMA_BASE_DIR = SCREENSHOT_DIR.resolve("panoramas");
+	private final String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
@@ -44,13 +50,33 @@ public class PanoramaCraft implements ClientModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (panoramaKeyBinding.wasPressed() && client.player != null) {
 
-				client.takePanorama(GAME_DIR.toFile());
+				// setup folder
+				Path panoramaDir = PANORAMA_BASE_DIR.resolve(timestamp);
+				try {
+					Files.createDirectories(panoramaDir);
+				} catch (IOException e) {
+					LOGGER.error("Unable to create panorama screenshot directory. Path: {}", panoramaDir, e);
+					client.player.sendMessage(
+							Text.translatable("panorama_screenshot.error.create_folder")
+									.formatted(Formatting.RED),
+							false
+					);
+					return;
+				}
 
+				// take panorama
+				client.takePanorama(panoramaDir.toFile());
+
+				// attach "/screenshots" because Mojangs takePanorama() does it
+				panoramaDir = panoramaDir.resolve("screenshots");
+
+				// build player message
+				Path finalPanoramaDir = panoramaDir;
 				Text panoramaTakenText = Text.literal(PANORAMA_NAMES)
 						.formatted(Formatting.UNDERLINE)
-						.styled((style) -> {
-					return style.withClickEvent(new ClickEvent.OpenFile(SCREENSHOT_DIR));
-				});
+						.styled(style -> style.withClickEvent(new ClickEvent.OpenFile(finalPanoramaDir.toAbsolutePath().toString())));
+
+				// send messages
                 client.player.sendMessage(Text.translatable("screenshot.success", new Object[]{panoramaTakenText}), false);
 			}
 		});
