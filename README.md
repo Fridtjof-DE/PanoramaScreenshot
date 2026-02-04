@@ -11,10 +11,13 @@
 The mod is characterized by the fact that it makes unused panorama screenshot code already included in the vanilla game usable. This makes the mod very lightweight and presumably easy and quick to update to the next Minecraft versions.
 
 ## How to take panorama screenshots
-It's as simple as just pressing F4. (The key is configurable.) The rest is completely automated. No need to adjust the window size or FOV. The screenshots are then simply saved in the regular screenshot folder.
+It's as simple as just pressing F4. (The key is configurable.) The rest is completely automated. No need to adjust the window size or FOV. The screenshots are then simply saved in the regular screenshot folder or, starting with mod version 1.1.0, in timestamped subfolders.
 
 ## Limited functionality with shaders
-Recordings with shaders enabled only work from version 1.21.8 onwards. In older versions the recording will be blank. I can't change that because this mod doesn't change Mojang's Panorama code, it just uses it.
+Recordings with shaders enabled only work from Minecraft version 1.21.8 onwards. In older versions the recording will be blank. I can't change that because this mod doesn't change Mojang's Panorama code, it just uses it.
+
+## Using the recordings
+This is just a very simple mod for creating recordings using Minecraft's own function. If you want to use the recording as your main menu background, for example, you will need to create your own texture pack. There are plenty of tutorials online for this.
 
 ## Images
 ![screenshots viewed in file explorer](https://cdn.modrinth.com/data/K3RHGadZ/images/05c29143578bc29e9cc08b26eb622aea3d9804d5.png)
