@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'maven-publish'
 }
 
@@ -28,38 +28,34 @@ dependencies {
 
 
     // Mojangs Mappings
-    //mappings loom.officialMojangMappings()
+    // mappings loom.officialMojangMappings()
     // Yarn
-    mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
+    //mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
 
 
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 }
 
 processResources {
-    inputs.property "version", project.version
-    inputs.property "minecraft_version", project.minecraft_version
-    inputs.property "loader_version", project.loader_version
-    inputs.property "fabric_api_version", project.fabric_api_version
-    filteringCharset = "UTF-8"
+    def expandProps = [
+            "version": project.version,
+            "minecraft_version": project.minecraft_version
+    ]
+
+    inputs.properties(expandProps)
 
     filesMatching("fabric.mod.json") {
-        expand(
-                version: project.version,
-                minecraft_version: project.minecraft_version,
-                loader_version: project.loader_version,
-                fabric_api_version: project.fabric_api_version
-        )
+        expand expandProps
     }
 }
 
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.release = 25
 }
 
 java {
@@ -68,15 +64,16 @@ java {
     // If you remove this line, sources will not be generated.
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {
-    inputs.property "archivesName", project.base.archivesName
+    def projectName = project.name
+    inputs.property "projectName", projectName
 
     from("LICENSE") {
-        rename { "${it}_${inputs.properties.archivesName}"}
+        rename { "${it}_$projectName"}
     }
 }
 
@@ -84,7 +81,6 @@ jar {
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
             from components.java
         }
     }

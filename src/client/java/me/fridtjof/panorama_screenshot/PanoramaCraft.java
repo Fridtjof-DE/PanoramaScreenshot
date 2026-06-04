@@ -1,16 +1,15 @@
 package me.fridtjof.panorama_screenshot;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
-
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,18 +36,18 @@ public class PanoramaCraft implements ClientModInitializer {
 	public void onInitializeClient() {
 
 		// register keybind
-		KeyBinding panoramaKeyBinding = new KeyBinding(
+		KeyMapping panoramaKeyBinding = new KeyMapping(
 				"key.panorama_screenshot.take", // translation key
-				InputUtil.Type.KEYSYM,
+				InputConstants.Type.KEYSYM,
 				GLFW.GLFW_KEY_F4,
-				KeyBinding.Category.create(Identifier.of(MOD_ID, "panorama_screenshot"))
+				KeyMapping.Category.register(Identifier.fromNamespaceAndPath(MOD_ID, "panorama_screenshot"))
 				);
-		KeyBindingHelper.registerKeyBinding(panoramaKeyBinding);
+		KeyMappingHelper.registerKeyMapping(panoramaKeyBinding);
 
 
 		// register panorama screenshot event
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (panoramaKeyBinding.wasPressed() && client.player != null) {
+			while (panoramaKeyBinding.consumeClick() && client.player != null) {
 
 				// setup folder
 				Path panoramaDir = PANORAMA_BASE_DIR.resolve(timestamp);
@@ -56,28 +55,27 @@ public class PanoramaCraft implements ClientModInitializer {
 					Files.createDirectories(panoramaDir);
 				} catch (IOException e) {
 					LOGGER.error("Unable to create panorama screenshot directory. Path: {}", panoramaDir, e);
-					client.player.sendMessage(
-							Text.translatable("panorama_screenshot.error.create_folder")
-									.formatted(Formatting.RED),
-							false
+					client.player.sendSystemMessage(
+							Component.translatable("panorama_screenshot.error.create_folder")
+									.withStyle(ChatFormatting.RED)
 					);
 					return;
 				}
 
 				// take panorama
-				client.takePanorama(panoramaDir.toFile());
+				client.grabPanoramixScreenshot(panoramaDir.toFile());
 
 				// attach "/screenshots" because Mojangs takePanorama() does it
 				panoramaDir = panoramaDir.resolve("screenshots");
 
 				// build player message
 				Path finalPanoramaDir = panoramaDir;
-				Text panoramaTakenText = Text.literal(PANORAMA_NAMES)
-						.formatted(Formatting.UNDERLINE)
-						.styled(style -> style.withClickEvent(new ClickEvent.OpenFile(finalPanoramaDir.toAbsolutePath().toString())));
+				Component panoramaTakenText = Component.literal(PANORAMA_NAMES)
+						.withStyle(ChatFormatting.UNDERLINE)
+						.withStyle(style -> style.withClickEvent(new ClickEvent.OpenFile(finalPanoramaDir.toAbsolutePath().toString())));
 
 				// send messages
-                client.player.sendMessage(Text.translatable("screenshot.success", new Object[]{panoramaTakenText}), false);
+				client.player.sendSystemMessage(Component.translatable("screenshot.success", new Object[]{panoramaTakenText}));
 			}
 		});
 	}
