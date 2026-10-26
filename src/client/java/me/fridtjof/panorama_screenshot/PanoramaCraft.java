@@ -10,7 +10,6 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,7 @@ public class PanoramaCraft implements ClientModInitializer {
 	private final Path PANORAMA_BASE_DIR = SCREENSHOT_DIR.resolve("panoramas");
 	private final String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
 	public void onInitializeClient() {
@@ -38,10 +37,10 @@ public class PanoramaCraft implements ClientModInitializer {
 		// register keybind
 		KeyMapping panoramaKeyBinding = new KeyMapping(
 				"key.panorama_screenshot.take", // translation key
-				InputConstants.Type.KEYSYM,
-				GLFW.GLFW_KEY_F4,
+				InputConstants.Type.KEYBOARD,
+				InputConstants.KEY_F4,
 				KeyMapping.Category.register(Identifier.fromNamespaceAndPath(MOD_ID, "panorama_screenshot"))
-				);
+		);
 		KeyMappingHelper.registerKeyMapping(panoramaKeyBinding);
 
 
